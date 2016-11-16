@@ -1,4 +1,4 @@
-application: your-project-id
+application: pox-prb1
 version: alpha-001
 runtime: python27
 api_version: 1
