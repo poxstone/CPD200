@@ -57,15 +57,15 @@ class ConferenceApi(remote.Service):
         ## TODO
         ## make sure user is authed
         ## uncomment the following lines:
-        # user = endpoints.get_current_user()
-        # if not user:
-        #     raise endpoints.UnauthorizedException('Authorization required')
+        user = endpoints.get_current_user()
+        if not user:
+            raise endpoints.UnauthorizedException('Authorization required')
         profile = None
         if not profile:
             profile = Profile(
                 key = None,
-                displayName = "Test",
-                mainEmail= None,
+                displayName = user.nickname(),
+                mainEmail= user.email(),
                 teeShirtSize = str(TeeShirtSize.NOT_SPECIFIED),
             )
             #TODO
