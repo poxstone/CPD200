@@ -1,9 +1,12 @@
 application:  pox-prb1
 module: admin
-version: alpha-001
+version: alpha-002
 runtime: go
 api_version: go1
 
 handlers:
 - url: /.*
   script: _go_app
+  login: admin 
+  secure: always #always  https
+
