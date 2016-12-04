@@ -22,6 +22,8 @@ from models import ProfileMiniForm
 from models import ProfileForm
 from models import TeeShirtSize
 
+from utils import getUserId
+
 from settings import WEB_CLIENT_ID
 
 EMAIL_SCOPE = endpoints.EMAIL_SCOPE
@@ -62,15 +64,18 @@ class ConferenceApi(remote.Service):
         user = endpoints.get_current_user()
         if not user:
             raise endpoints.UnauthorizedException('Authorization required')
-        profile = None
+        # get Profile from datastore
+        user_id = getUserId(user) # id is the email
+        p_key = ndb.Key(Profile, user_id) # generate key
+        profile = p_key.get()
         if not profile:
             profile = Profile(
-                key = None,
+                key = p_key,
                 displayName = user.nickname(),
                 mainEmail= user.email(),
                 teeShirtSize = str(TeeShirtSize.NOT_SPECIFIED),
             )
-            #TODO
+            profile.put()
 
         return profile      # return Profile
 
@@ -87,7 +92,7 @@ class ConferenceApi(remote.Service):
                     val = getattr(save_request, field)
                     if val:
                         setattr(prof, field, str(val))
-                        #TODO
+                        prof.put()
 
         # return ProfileForm
         return self._copyProfileToForm(prof)
