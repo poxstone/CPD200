@@ -23,7 +23,7 @@ from models import ProfileForm
 from models import Conference
 from models import ConferenceForm
 from models import ConferenceForms
-from models import ConferenceQueryForm
+from models import ConferenceQueryForms
 from models import TeeShirtSize
 
 from utils import getUserId
@@ -41,6 +41,22 @@ DEFAULTS = {
     "topics": [ "Default", "Topic" ],
 }
 
+OPERATORS = {
+            'EQ':   '=',
+            'GT':   '>',
+            'GTEQ': '>=',
+            'LT':   '<',
+            'LTEQ': '<=',
+            'NE':   '!='
+            }
+
+FIELDS =    {
+            'CITY': 'city',
+            'TOPIC': 'topics',
+            'MONTH': 'month',
+            'MAX_ATTENDEES': 'maxAttendees',
+            }
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 @endpoints.api( name='conference',
@@ -51,7 +67,6 @@ class ConferenceApi(remote.Service):
     """Conference API v0.1"""
 
 # - - - Conference objects - - - - - - - - - - - - - - - - -
-
     def _copyConferenceToForm(self, conf, displayName):
         """Copy relevant fields from Conference to ConferenceForm."""
         cf = ConferenceForm()
@@ -72,9 +87,6 @@ class ConferenceApi(remote.Service):
 
     def _createConferenceObject(self, request):
         """Create or update Conference object, returning ConferenceForm/request."""
-        print '*-_'*10
-        print request
-        print '*-_'*10
         # preload necessary data items
         user = endpoints.get_current_user()
         if not user:
@@ -124,14 +136,60 @@ class ConferenceApi(remote.Service):
 
         return request
 
+    def _getQuery(self, request):
+        """Return formatted query from the submitted filters."""
+        q = Conference.query()
+        inequality_filter, filters = self._formatFilters(request.filters)
 
-    @endpoints.method(ConferenceQueryForm, ConferenceForms,
+        # If exists, sort on inequality filter first
+        if not inequality_filter:
+            q = q.order(Conference.name)
+        else:
+            q = q.order(ndb.GenericProperty(inequality_filter))
+            q = q.order(Conference.name)
+
+        for filtr in filters:
+            if filtr["field"] in ["month", "maxAttendees"]:
+                filtr["value"] = int(filtr["value"])
+            formatted_query = ndb.query.FilterNode(filtr["field"], filtr["operator"], filtr["value"])
+            q = q.filter(formatted_query)
+        return q
+
+
+    def _formatFilters(self, filters):
+        """Parse, check validity and format user supplied filters."""
+        formatted_filters = []
+        inequality_field = None
+
+        for f in filters:
+            filtr = {field.name: getattr(f, field.name) for field in f.all_fields()}
+
+            try:
+                filtr["field"] = FIELDS[filtr["field"]]
+                filtr["operator"] = OPERATORS[filtr["operator"]]
+            except KeyError:
+                raise endpoints.BadRequestException("Filter contains invalid field or operator.")
+
+            # Every operation except "=" is an inequality
+            if filtr["operator"] != "=":
+                # check if inequality operation has been used in previous filters
+                # disallow the filter if inequality was performed on a different field before
+                # track the field on which the inequality operation is performed
+                if inequality_field and inequality_field != filtr["field"]:
+                    raise endpoints.BadRequestException("Inequality filter is allowed on only one field.")
+                else:
+                    inequality_field = filtr["field"]
+
+            formatted_filters.append(filtr)
+        return (inequality_field, formatted_filters)
+
+    @endpoints.method(ConferenceQueryForms, ConferenceForms,
                 path='queryConferences',
                 http_method='POST',
                 name='queryConferences')
     def queryConferences(self, request):
         """Query for conferences."""
-        conferences = Conference.query()
+        conferences = self._getQuery(request)
 
          # return individual ConferenceForm object per Conference
         return ConferenceForms(
@@ -268,29 +326,41 @@ class ConferenceApi(remote.Service):
             items=[self._copyConferenceToForm(conf, "") for conf in q]
         )
 
-@endpoints.api( name='populate',
-                version='v1',
-                allowed_client_ids=[WEB_CLIENT_ID, API_EXPLORER_CLIENT_ID],
-                scopes=[EMAIL_SCOPE])
-class PopulateConference(remote.Service):
-    """Conference populate"""
-    @endpoints.method(message_types.VoidMessage, ConferenceForm,
+    @endpoints.method(message_types.VoidMessage, ConferenceForms,
             path='poplulate', http_method='GET', name='populateApp')
     def populateApp(self, request):
         """Populate and reutrn conference"""
-        # preload necessary data items
-        user = endpoints.get_current_user()
-        if not user:
-            raise endpoints.UnauthorizedException('Authorization required')
-        user_id = getUserId(user)
+
+        confs = [ConferenceForm( name= u'Primera', description= u'Dias', topics= [u'Medical Innovations'], city= u'Chicago',
+                  maxAttendees= 25, startDate= u'2016-11-25T05:00:00.000Z', endDate= u'2016-12-03T05:00:00.000Z'),
+
+                ConferenceForm( name= u'Segunda', description= u'Tardes', topics= [u'Programming Languages'], city= u'London',
+                  maxAttendees= 50, startDate= u'2016-10-15T05:00:00.000Z', endDate= u'2016-10-03T05:00:00.000Z'),
+
+                ConferenceForm( name= u'tercera', description= u'Noches', topics= [u'Web Technologies'], city= u'Paris',
+                  maxAttendees= 75, startDate= u'2016-10-15T05:00:00.000Z', endDate= u'2016-10-25T05:00:00.000Z'),
+
+                ConferenceForm( name= u'Quarta', description= u'Desveladas', topics= [u'Movie Making'], city= u'Tokyo',
+                  maxAttendees= 100, startDate= u'2016-10-31T05:00:00.000Z', endDate= u'2016-11-05T05:00:00.000Z'),
+
+                ConferenceForm( name= u'Quinta', description= u'trasnochadas', topics= [u'Health and Nutrition'], city= u'Chicago',
+                  maxAttendees= 5, startDate= u'2016-11-15T05:00:00.000Z', endDate= u'2016-12-03T05:00:00.000Z'),
+
+                ConferenceForm( name= u'a', description= u'madrugadas', topics= [u'Medical Innovations', u'Movie Making'], city= u'London',
+                  maxAttendees= 0, startDate= u'2016-11-28T05:00:00.000Z', endDate= u'2016-12-05T05:00:00.000Z'),
+
+                ConferenceForm( name= u'A', description= u'seguir de largo', topics= [u'Health and Nutrition', u'Programming Languages'], city= u'Paris',
+                  maxAttendees= -1, startDate= u'2016-12-08T05:00:00.000Z', endDate= u'2016-12-25T05:00:00.000Z')
+               ]
+
+        for conf in confs:
+            self._createConferenceObject(conf)
 
         conferences = Conference.query()
-        # get the user profile and display name
-        displayName = getattr(prof, 'displayName')
         # return set of ConferenceForm objects per Conference
         return ConferenceForms(
-            items=[self._copyConferenceToForm(conf, displayName) for conf in conferences]
+            items=[self._copyConferenceToForm(conf, None) for conf in conferences]
         )
 
 # registers API
-api = endpoints.api_server([ConferenceApi, PopulateConference])
+api = endpoints.api_server([ConferenceApi])
