@@ -72,6 +72,9 @@ class ConferenceApi(remote.Service):
 
     def _createConferenceObject(self, request):
         """Create or update Conference object, returning ConferenceForm/request."""
+        print '*-_'*10
+        print request
+        print '*-_'*10
         # preload necessary data items
         user = endpoints.get_current_user()
         if not user:
@@ -247,7 +250,7 @@ class ConferenceApi(remote.Service):
     def filterPlayground(self, request):
         q = Conference.query()
         # simple filter usage:
-        q = q.filter(Conference.city == "Paris")
+        q = q.filter(Conference.city == "London")
 
         # advanced filter building and usage
         # field = "city"
@@ -265,5 +268,29 @@ class ConferenceApi(remote.Service):
             items=[self._copyConferenceToForm(conf, "") for conf in q]
         )
 
+@endpoints.api( name='populate',
+                version='v1',
+                allowed_client_ids=[WEB_CLIENT_ID, API_EXPLORER_CLIENT_ID],
+                scopes=[EMAIL_SCOPE])
+class PopulateConference(remote.Service):
+    """Conference populate"""
+    @endpoints.method(message_types.VoidMessage, ConferenceForm,
+            path='poplulate', http_method='GET', name='populateApp')
+    def populateApp(self, request):
+        """Populate and reutrn conference"""
+        # preload necessary data items
+        user = endpoints.get_current_user()
+        if not user:
+            raise endpoints.UnauthorizedException('Authorization required')
+        user_id = getUserId(user)
+
+        conferences = Conference.query()
+        # get the user profile and display name
+        displayName = getattr(prof, 'displayName')
+        # return set of ConferenceForm objects per Conference
+        return ConferenceForms(
+            items=[self._copyConferenceToForm(conf, displayName) for conf in conferences]
+        )
+
 # registers API
-api = endpoints.api_server([ConferenceApi])
+api = endpoints.api_server([ConferenceApi, PopulateConference])
