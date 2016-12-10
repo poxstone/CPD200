@@ -240,6 +240,115 @@ conferenceApp.controllers.controller('CreateConferenceCtrl',
                     });
                 });
         };
+
+        /**
+         * Invokes the conference.createConference API.
+         *
+         * @param conferenceForm the form object.
+         */
+        $scope.populateConference = function () {
+            var confs = [
+                {"alt": "json", 
+                "name": "Primero", 
+                "city": "Chicago", 
+                "description": "Madrugada", 
+                "maxAttendees": "5", 
+                "seatsAvailable": "5", 
+                "organizerUserId": "pox255@gmail.com", 
+                "startDate": "2016-11-01T05:00:00.000Z", 
+                "endDate": "2016-11-03T05:00:00.000Z", 
+                "topics": [
+                    "Medical Innovations",
+                ]},
+                {"alt": "json", 
+                "name": "Segundo", 
+                "city": "London", 
+                "description": "Días", 
+                "maxAttendees": "25", 
+                "seatsAvailable": "25", 
+                "organizerUserId": "pox255@gmail.com", 
+                "startDate": "2016-11-05T05:00:00.000Z", 
+                "endDate": "2016-11-15T05:00:00.000Z", 
+                "topics": [
+                    "Programming Languages",
+                ]},
+                {"alt": "json", 
+                "name": "Tercero", 
+                "city": "Paris", 
+                "description": "Tardes", 
+                "maxAttendees": "50", 
+                "seatsAvailable": "50", 
+                "organizerUserId": "pox255@gmail.com", 
+                "startDate": "2016-11-15T05:00:00.000Z", 
+                "endDate": "2016-11-25T05:00:00.000Z", 
+                "topics": [
+                    "Web Technologies",
+                ]},
+                {"alt": "json", 
+                "name": "Quarto", 
+                "city": "San Francisco", 
+                "description": "Anocheceres", 
+                "maxAttendees": "75", 
+                "seatsAvailable": "75", 
+                "organizerUserId": "pox255@gmail.com", 
+                "startDate": "2016-11-20T05:00:00.000Z", 
+                "endDate": "2016-11-03T30:00:00.000Z", 
+                "topics": [
+                    "Movie Making",
+                ]},
+                {"alt": "json", 
+                "name": "Quinto", 
+                "city": "Tokyo", 
+                "description": "Noches", 
+                "maxAttendees": "100", 
+                "seatsAvailable": "100", 
+                "organizerUserId": "pox255@gmail.com", 
+                "startDate": "2016-11-25T05:00:00.000Z", 
+                "endDate": "2016-12-03T05:00:00.000Z", 
+                "topics": [
+                    "Health and Nutrition",
+                ]},
+                {"alt": "json", 
+                "name": "Sexto", 
+                "city": "Paris", 
+                "description": "Trasnochadas", 
+                "maxAttendees": "115", 
+                "seatsAvailable": "115", 
+                "organizerUserId": "pox255@gmail.com", 
+                "startDate": "2016-12-05T05:00:00.000Z", 
+                "endDate": "2016-12-15T05:00:00.000Z", 
+                "topics": [
+                    "Medical Innovations",
+                    "Web Technologies",
+                    "Health and Nutrition",
+                ]},
+                {"alt": "json", 
+                "name": "Septimo", 
+                "city": "Chicago", 
+                "description": "Fin de semana", 
+                "maxAttendees": "125", 
+                "seatsAvailable": "125", 
+                "organizerUserId": "pox255@gmail.com", 
+                "startDate": "2016-12-15T05:00:00.000Z", 
+                "endDate": "2016-12-15T25:00:00.000Z", 
+                "topics": [
+                    "Programming Languages",
+                    "Movie Making",
+                ]},
+            ];
+
+            var i = 0;
+            for (var o in confs) {
+                gapi.client.conference.createConference(confs[i]).execute(function (resp) {
+                    i++;
+                    if (resp.error) {
+                        alert('error: ' + i);
+                    } else if (i == confs.length) {
+                        alert('success');
+                    }
+                });
+            }
+        };
     });
 
 /**
