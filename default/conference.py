@@ -413,26 +413,26 @@ class ConferenceApi(remote.Service):
     def populateApp(self, request):
         """Populate and reutrn conference"""
 
-        confs = [ConferenceForm( name= u'Primera', description= u'Dias', topics= [u'Medical Innovations'], city= u'Chicago',
-                  maxAttendees= 25, startDate= u'2016-11-25T05:00:00.000Z', endDate= u'2016-12-03T05:00:00.000Z'),
+        confs = [ConferenceForm( name= u'aa', description= u'Uno', topics= [u'Medical Innovations'], city= u'Chicago',
+                  maxAttendees= 10, startDate= u'2016-11-25T05:00:00.000Z', endDate= u'2016-12-03T05:00:00.000Z'),
 
-                ConferenceForm( name= u'Segunda', description= u'Tardes', topics= [u'Programming Languages'], city= u'London',
-                  maxAttendees= 50, startDate= u'2016-10-15T05:00:00.000Z', endDate= u'2016-10-03T05:00:00.000Z'),
+                ConferenceForm( name= u'bb', description= u'Dos', topics= [u'Programming Languages'], city= u'London',
+                  maxAttendees= 20, startDate= u'2016-10-15T05:00:00.000Z', endDate= u'2016-10-03T05:00:00.000Z'),
 
-                ConferenceForm( name= u'tercera', description= u'Noches', topics= [u'Web Technologies'], city= u'Paris',
-                  maxAttendees= 75, startDate= u'2016-10-15T05:00:00.000Z', endDate= u'2016-10-25T05:00:00.000Z'),
+                ConferenceForm( name= u'cc', description= u'Tres', topics= [u'Web Technologies'], city= u'Paris',
+                  maxAttendees= 30, startDate= u'2016-10-15T05:00:00.000Z', endDate= u'2016-10-25T05:00:00.000Z'),
 
-                ConferenceForm( name= u'Quarta', description= u'Desveladas', topics= [u'Movie Making'], city= u'Tokyo',
-                  maxAttendees= 100, startDate= u'2016-10-31T05:00:00.000Z', endDate= u'2016-11-05T05:00:00.000Z'),
+                ConferenceForm( name= u'dd', description= u'Cuatro', topics= [u'Movie Making'], city= u'Tokyo',
+                  maxAttendees= 40, startDate= u'2016-10-31T05:00:00.000Z', endDate= u'2016-11-05T05:00:00.000Z'),
 
-                ConferenceForm( name= u'Quinta', description= u'trasnochadas', topics= [u'Health and Nutrition'], city= u'Chicago',
-                  maxAttendees= 5, startDate= u'2016-11-15T05:00:00.000Z', endDate= u'2016-12-03T05:00:00.000Z'),
+                ConferenceForm( name= u'ee', description= u'Cinco', topics= [u'Health and Nutrition'], city= u'Chicago',
+                  maxAttendees= 50, startDate= u'2016-11-15T05:00:00.000Z', endDate= u'2016-12-03T05:00:00.000Z'),
 
-                ConferenceForm( name= u'a', description= u'madrugadas', topics= [u'Medical Innovations', u'Movie Making'], city= u'London',
-                  maxAttendees= 0, startDate= u'2016-11-28T05:00:00.000Z', endDate= u'2016-12-05T05:00:00.000Z'),
+                ConferenceForm( name= u'ff', description= u'Seis', topics= [u'Medical Innovations', u'Movie Making'], city= u'London',
+                  maxAttendees= 60, startDate= u'2016-11-28T05:00:00.000Z', endDate= u'2016-12-05T05:00:00.000Z'),
 
-                ConferenceForm( name= u'A', description= u'seguir de largo', topics= [u'Health and Nutrition', u'Programming Languages'], city= u'Paris',
-                  maxAttendees= -1, startDate= u'2016-12-08T05:00:00.000Z', endDate= u'2016-12-25T05:00:00.000Z')
+                ConferenceForm( name= u'gg', description= u'Siete', topics= [u'Health and Nutrition', u'Programming Languages'], city= u'Paris',
+                  maxAttendees= 70, startDate= u'2016-12-08T05:00:00.000Z', endDate= u'2016-12-25T05:00:00.000Z')
                ]
 
         for conf in confs:
