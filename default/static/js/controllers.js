@@ -768,6 +768,21 @@ conferenceApp.controllers.controller('RootCtrl', function ($scope, $location, oa
         angular.element(document.querySelector('.navbar-collapse')).removeClass('in');
     };
 
+    /**
+     * Precharge data
+     */
+    $scope.populateApp = function() {
+        gapi.client.conference.populateApp().execute( function(resp) {
+            if (resp.error) {
+                alert('error');
+            } else {
+                alert('success');
+                window.location.href = "/#/conference";
+                window.location.reload();
+            }
+        });
+    };
+
 });
 
 
