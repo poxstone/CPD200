@@ -27,6 +27,8 @@ from models import ConferenceForm
 from models import ConferenceForms
 from models import ConferenceQueryForms
 from models import TeeShirtSize
+from models import Alert
+from models import LatestAlert
 
 from utils import getUserId
 
@@ -406,6 +408,54 @@ class ConferenceApi(remote.Service):
         prof = conf.key.parent().get()
         # return ConferenceForm
         return self._copyConferenceToForm(conf, getattr(prof, 'displayName'))
+
+# - - - Alerts - - - - - - - - - - - - - - - - - - - - - - -
+
+    def _doAlert(self):
+        """Get latest alert and return to user"""
+        # retrieve latest alert from datastore
+        a = Alert.query().order(-Alert.date).get()
+        la = LatestAlert()
+        for field in la.all_fields():
+            # retrieve content string and discard the rest
+            if field.name == 'content':
+                setattr(la, field.name, a.content)
+        la.check_initialized()
+        return la
+
+
+    @endpoints.method(message_types.VoidMessage, LatestAlert,
+                path='alert', http_method='GET', name='getAlert')
+    def getAlert(self, request):
+        """Return latest alert."""
+        return self._doAlert()
+
+
+    @endpoints.method(message_types.VoidMessage, ConferenceForms,
+            path='filterPlayground',
+            http_method='GET', name='filterPlayground')
+    def filterPlayground(self, request):
+        q = Conference.query()
+        # simple filter usage:
+        # q = q.filter(Conference.city == "Paris")
+
+        # advanced filter building and usage
+        # field = "city"
+        # operator = "="
+        # value = "London"
+        # f = ndb.query.FilterNode(field, operator, value)
+        # q = q.filter(f)
+
+        # TODO
+        # add 2 filters:
+        # 1: city equals to Chicago
+        # 2: topic equals "Medical Innovations"
+        q = q.filter(Conference.city=="Chicago")
+        q = q.filter(Conference.topics=="Medical Innovations")
+
+        return ConferenceForms(
+            items=[self._copyConferenceToForm(conf, "") for conf in q]
+        )
 
 
     @endpoints.method(message_types.VoidMessage, ConferenceForms,
