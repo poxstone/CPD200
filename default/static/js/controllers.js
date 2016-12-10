@@ -337,15 +337,17 @@ conferenceApp.controllers.controller('CreateConferenceCtrl',
                 ]},
             ];
 
-            var i = 0;
-            for (var o in confs) {
-                gapi.client.conference.createConference(confs[i]).execute(function (resp) {
-                    i++;
+            var i = 0; // counter
+
+            for (var j=0; j < confs.length; j++) {
+                gapi.client.conference.createConference(confs[j]).execute(function (resp) {
                     if (resp.error) {
                         alert('error: ' + i);
-                    } else if (i == confs.length) {
+                    } else if (i == confs.length -1) {
                         alert('success');
                     }
+                    // count +
+                    i++;
                 });
             }
         };
