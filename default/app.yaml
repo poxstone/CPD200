@@ -3,6 +3,11 @@ version: alpha-003
 runtime: python27
 api_version: 1
 threadsafe: yes
+automatic_scaling:
+  min_idle_instances: 0
+  max_idle_instances: automatic
+  min_pending_latency: 30ms
+  max_pending_latency: automatic
 
 handlers:       # static then dynamic
 
