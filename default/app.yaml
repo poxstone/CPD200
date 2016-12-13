@@ -36,8 +36,9 @@ handlers:       # static then dynamic
   secure: always
 
 - url: /tasks/send_confirmation_email
-  script: main
+  script: main.app
   login: admin
+  secure: always
 
 - url: /_ah/spi/.*
   script: conference.api
