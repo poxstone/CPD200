@@ -1,0 +1,7 @@
+dispatch:
+# Default module serves the typical web resources and all static resources.
+- url: "*/"
+  module: default
+
+- url: "*/admin"
+  module: admin
