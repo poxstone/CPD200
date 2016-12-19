@@ -321,30 +321,6 @@ class ConferenceApi(remote.Service):
         """Update & return user profile."""
         return self._doProfile(request)
 
-    @endpoints.method(message_types.VoidMessage, ConferenceForms,
-            path='filterPlayground',
-            http_method='GET', name='filterPlayground')
-    def filterPlayground(self, request):
-        q = Conference.query()
-        # simple filter usage:
-        q = q.filter(Conference.city == "London")
-
-        # advanced filter building and usage
-        # field = "city"
-        # operator = "="
-        # value = "London"
-        # f = ndb.query.FilterNode(field, operator, value)
-        # q = q.filter(f)
-
-        # TODO
-        # add 2 filters:
-        # 1: city equals to Chicago
-        # 2: topic equals "Medical Innovations"
-
-        return ConferenceForms(
-            items=[self._copyConferenceToForm(conf, "") for conf in q]
-        )
-
 # - - - Announcements - - - - - - - - - - - - - - - - - - - -
 
     @staticmethod
@@ -478,25 +454,24 @@ class ConferenceApi(remote.Service):
 
     @endpoints.method(message_types.VoidMessage, ConferenceForms,
             path='filterPlayground',
+            allowed_client_ids=None,
             http_method='GET', name='filterPlayground')
     def filterPlayground(self, request):
         q = Conference.query()
+        #q = Conference.query(Conference.city == "London")
         # simple filter usage:
-        # q = q.filter(Conference.city == "Paris")
 
         # advanced filter building and usage
-        # field = "city"
-        # operator = "="
-        # value = "London"
-        # f = ndb.query.FilterNode(field, operator, value)
-        # q = q.filter(f)
+        f = ndb.query.FilterNode('city', '>', 'London')
+        q = q.filter(f)
+        f = ndb.query.FilterNode('city', '<', 'London')
+        q = q.filter(f)
 
         # TODO
         # add 2 filters:
         # 1: city equals to Chicago
         # 2: topic equals "Medical Innovations"
-        q = q.filter(Conference.city=="Chicago")
-        q = q.filter(Conference.topics=="Medical Innovations")
+        # q = q.filter(Conference.topics=="Medical Innovations")
 
         return ConferenceForms(
             items=[self._copyConferenceToForm(conf, "") for conf in q]
