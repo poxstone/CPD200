@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import webapp2
 from google.appengine.api import app_identity
 from google.appengine.api import mail
@@ -12,8 +10,8 @@ class SetAnnouncementHandler(webapp2.RequestHandler):
         if not header:
             raise ValueError('attempt to access cron handler directly, '
                              'missing custom App Engine header')
-        # TODO 1
-        # use _cacheAnnouncement() to set announcement in Memcache
+        Conference._cacheAnnouncement()
+        self.response.set_status(204)
 
 
 class SendConfirmationEmailHandler(webapp2.RequestHandler):
