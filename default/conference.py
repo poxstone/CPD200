@@ -462,10 +462,9 @@ class ConferenceApi(remote.Service):
         # simple filter usage:
 
         # advanced filter building and usage
-        f = ndb.query.FilterNode('city', '>', 'London')
+        f = ndb.query.FilterNode('city', '>', 'D')
         q = q.filter(f)
-        f = ndb.query.FilterNode('city', '<', 'London')
-        q = q.filter(f)
+        # q = q.order('-description')
 
         # TODO
         # add 2 filters:
