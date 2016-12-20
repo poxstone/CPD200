@@ -19,47 +19,90 @@ indexes:
 - kind: Conference
   properties:
   - name: city
-  - name: maxAttendees
-  - name: month
-  - name: name
+  - name: city
 
 - kind: Conference
   properties:
   - name: city
-  - name: maxAttendees
-  - name: month
-  - name: topics
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: city
-  - name: maxAttendees
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: city
-  - name: month
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: city
-  - name: month
-  - name: topics
-  - name: name
-
-- kind: Conference
-  properties:
   - name: city
   - name: name
 
 - kind: Conference
   properties:
   - name: city
+  - name: description
+  - name: maxAttendees
+  - name: month
+  - name: seatsAvailable
+  - name: description
+
+- kind: Conference
+  properties:
+  - name: city
+  - name: maxAttendees
+
+- kind: Conference
+  properties:
+  - name: city
+  - name: maxAttendees
+  - name: month
+  - name: seatsAvailable
+  - name: description
+
+- kind: Conference
+  properties:
+  - name: city
+  - name: month
+  - name: maxAttendees
+
+- kind: Conference
+  properties:
+  - name: city
+  - name: month
+  - name: maxAttendees
+  - name: name
+  - name: topics
+  - name: seatsAvailable
+
+- kind: Conference
+  properties:
+  - name: city
+  - name: month
+  - name: seatsAvailable
+  - name: maxAttendees
+
+- kind: Conference
+  properties:
+  - name: city
+  - name: name
+
+- kind: Conference
+  properties:
+  - name: city
   - name: topics
   - name: name
+
+- kind: Conference
+  properties:
+  - name: maxAttendees
+  - name: city
+
+- kind: Conference
+  properties:
+  - name: maxAttendees
+  - name: city
+  - name: description
+
+- kind: Conference
+  properties:
+  - name: maxAttendees
+  - name: maxAttendees
+  - name: name
+
+- kind: Conference
+  properties:
+  - name: maxAttendees
+  - name: month
 
 - kind: Conference
   properties:
@@ -70,39 +113,54 @@ indexes:
 - kind: Conference
   properties:
   - name: maxAttendees
-  - name: month
-  - name: topics
   - name: name
 
 - kind: Conference
   properties:
   - name: maxAttendees
-  - name: name
+  - name: seatsAvailable
 
 - kind: Conference
   properties:
   - name: maxAttendees
   - name: topics
+  - name: maxAttendees
   - name: name
 
 - kind: Conference
   properties:
+  - name: month
+  - name: maxAttendees
+
+- kind: Conference
+  properties:
+  - name: month
   - name: month
   - name: name
 
 - kind: Conference
   properties:
   - name: month
-  - name: topics
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: topics
   - name: name
 
 - kind: Conference
   properties:
   - name: seatsAvailable
+  - name: maxAttendees
+
+- kind: Conference
+  properties:
+  - name: topics
+  - name: city
   - name: name
 
+- kind: Conference
+  properties:
+  - name: topics
+  - name: name
+
+- kind: Conference
+  properties:
+  - name: topics
+  - name: topics
+  - name: name

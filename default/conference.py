@@ -459,12 +459,21 @@ class ConferenceApi(remote.Service):
     def filterPlayground(self, request):
         q = Conference.query()
         #q = Conference.query(Conference.city == "London")
+        q = ndb.gql("SELECT * FROM Conference WHERE city = 'London'")
         # simple filter usage:
 
         # advanced filter building and usage
-        f = ndb.query.FilterNode('city', '>', 'D')
-        q = q.filter(f)
-        # q = q.order('-description')
+        #f = ndb.query.FilterNode('maxAttendees', '>', 0)
+        #q = q.filter(f)
+
+        #q = Conference.query(Conference.city != 'London')
+        #q = Conference.query(ndb.OR(Conference.city < 'London', Conference.city > 'London'))
+
+        #q = q.order(Conference.description)
+        q = q.order(-Conference.city)
+
+        #q = q.fetch(limit=3, projection=[Conference.maxAttendees])
+        q = q.fetch(limit=7)
 
         # TODO
         # add 2 filters:
