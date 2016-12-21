@@ -31,6 +31,11 @@ indexes:
   properties:
   - name: city
   - name: description
+
+- kind: Conference
+  properties:
+  - name: city
+  - name: description
   - name: maxAttendees
   - name: month
   - name: seatsAvailable
@@ -96,6 +101,12 @@ indexes:
 - kind: Conference
   properties:
   - name: maxAttendees
+  - name: city
+    direction: desc
+
+- kind: Conference
+  properties:
+  - name: maxAttendees
   - name: maxAttendees
   - name: name
 
@@ -147,6 +158,11 @@ indexes:
   properties:
   - name: seatsAvailable
   - name: maxAttendees
+
+- kind: Conference
+  properties:
+  - name: seatsAvailable
+  - name: name
 
 - kind: Conference
   properties:

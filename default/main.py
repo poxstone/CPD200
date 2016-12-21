@@ -10,7 +10,7 @@ class SetAnnouncementHandler(webapp2.RequestHandler):
         if not header:
             raise ValueError('attempt to access cron handler directly, '
                              'missing custom App Engine header')
-        Conference._cacheAnnouncement()
+        ConferenceApi._cacheAnnouncement()
         self.response.set_status(204)
 
 
